@@ -23,6 +23,12 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<spring-cloud.version>Edgware.SR2</spring-cloud.version>
+		<swagger.api.host>localhost:8080</swagger.api.host>
+		<swagger.api.title>用户管理</swagger.api.title>
+		<swagger.scheme>http</swagger.scheme>
+		<swagger.api.version>v1</swagger.api.version>
+		<swagger.api.description>用户管理相关接口</swagger.api.description>
+		<swagger.api.location>com.yhr.conrolller</swagger.api.location>
 	</properties>
 
 	<dependencies>
@@ -48,6 +54,16 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-feign</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.6</version>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-core</artifactId>
+			<version>1.5.3</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -67,6 +83,47 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.github.kongchen</groupId>
+				<artifactId>swagger-maven-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<apiSources>
+						<apiSource>
+							<springmvc>true</springmvc>
+							<locations>${swagger.api.location}</locations>
+							<schemes>${swagger.scheme}</schemes>
+							<host>${swagger.api.host}</host>
+							<basePath></basePath>
+							<info>
+								<title>${swagger.api.title}</title>
+								<version>${swagger.api.version}</version>
+								<description>${swagger.api.description}</description>
+								<termsOfService>
+									http://www.github.com/kongchen/swagger-maven-plugin
+								</termsOfService>
+								<contact>
+									<email>kongchen@gmail.com</email>
+									<name>Kong Chen</name>
+									<url>http://kongch.com</url>
+								</contact>
+							</info>
+							<!--Support classpath or file absolute path here. 1) classpath e.g: "classpath:/markdown.hbs", "classpath:/templates/hello.html" 2) file e.g: "${basedir}/src/main/resources/markdown.hbs", "${basedir}/src/main/resources/template/hello.html"-->
+							<templatePath>classpath:/template/strapdown.html.hbs</templatePath>
+							<outputPath>${basedir}/generated/document.html</outputPath>
+							<swaggerDirectory>${basedir}/generated/swagger-ui</swaggerDirectory>
+						</apiSource>
+					</apiSources>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
